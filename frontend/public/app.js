@@ -10,9 +10,6 @@ function getBase() {
         if (checkbox.checked) {
             base = checkbox.value;
         }
-        else {
-            base = "";
-        }
     });
     return base;
 }
@@ -20,11 +17,18 @@ const toppingSelect = document.querySelector("select");
 const alertSuccess = document.querySelector(".alert-success");
 form.addEventListener("submit", (event) => {
     event.preventDefault();
-    let base = getBase();
-    const data = {
-        name: nameInput.value,
-        address: addressInput.value,
-        base: base,
-        topping: toppingSelect.value,
-    };
+    if (form.checkValidity()) {
+        form.classList.remove("was-validated");
+        let base = getBase();
+        const data = {
+            name: nameInput.value,
+            address: addressInput.value,
+            base: base,
+            topping: toppingSelect.value,
+        };
+        console.log(data);
+    }
+    else {
+        form.classList.add("was-validated");
+    }
 });
