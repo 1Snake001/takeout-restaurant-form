@@ -33,17 +33,33 @@ form.addEventListener("submit", (event) => {
     base: base,
     topping: toppingSelect.value,
   };
-  console.log(data);
-  inputsDefaultValueReset();
+
+  const fetchOptions: RequestInit = {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+
+  fetch(url, fetchOptions)
+  .then((resp) => resp.json())
+  .then((userOrder) => {
+    alertSuccess.innerHTML = `Sikereses megrendelés. A rendelés azonosítója ${userOrder.id}`;
+    alertSuccess.style.display = "block";
+    inputsDefaultValueReset();
+  }).catch((err) => console.error(err));
   } else {
     form.classList.add("was-validated");
+    alertSuccess.style.display = "none";
   }
 });
 
 function inputsDefaultValueReset(): void {
   nameInput.value = "";
   addressInput.value = "";
-  
+
   let checkedBaseInput: any = getBase()[1];
   checkedBaseInput.checked = false;
 
