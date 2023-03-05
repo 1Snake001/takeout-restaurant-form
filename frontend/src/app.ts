@@ -7,13 +7,15 @@ const baseInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('[nam
 
 function getBase() {
   let base: string | undefined;
+  let checkedBaseInput : HTMLInputElement | undefined;
 
   baseInputs.forEach((checkbox) => {
     if (checkbox.checked) {
       base = checkbox.value;
+      checkedBaseInput = checkbox;
     }
   });
-    return base;
+    return [base, checkedBaseInput];
 }
 const toppingSelect: HTMLSelectElement = document.querySelector("select") as HTMLSelectElement;
 const alertSuccess: HTMLElement = document.querySelector(".alert-success") as HTMLElement;
@@ -23,7 +25,7 @@ form.addEventListener("submit", (event) => {
   
   if (form.checkValidity()) {
     form.classList.remove("was-validated");
-    let base = getBase();
+    let base = getBase()[0];
     
   const data = {
     name: nameInput.value,
@@ -32,8 +34,21 @@ form.addEventListener("submit", (event) => {
     topping: toppingSelect.value,
   };
   console.log(data);
-  
+  inputsDefaultValueReset();
   } else {
     form.classList.add("was-validated");
   }
 });
+
+function inputsDefaultValueReset(): void {
+  nameInput.value = "";
+  addressInput.value = "";
+  
+  let checkedBaseInput: any = getBase()[1];
+  checkedBaseInput.checked = false;
+
+  (toppingSelect as HTMLSelectElement).value = (
+    toppingSelect as HTMLSelectElement
+  ).options[0].value;
+
+};
